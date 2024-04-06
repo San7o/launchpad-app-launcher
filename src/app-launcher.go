@@ -7,21 +7,19 @@ import (
     "os"
 )
 
-// uname -a
-func runUname() {
+// ranger
+func runRanger() {
     // Command to execute
-    cmd := exec.Command("uname", "-a")
+    cmd := exec.Command("kitty", "ranger")
 
-    // Execute the command and capture output
-    output, err := cmd.CombinedOutput()
+    // Execute the command and detach
+    err := cmd.Start()
     if err != nil {
-        fmt.Println("Error running the command \"uname -a\":", err)
+        fmt.Println("Error running the command \"kitty ranger\":", err)
         return
     }
 
-    // Print the command output
-    fmt.Println(string(output))
-    fmt.Println("Command \"uname -a\" has been completed without erros")
+    fmt.Println("Command \"kitty ranger\" has been completed without erros")
 
 }
 
@@ -30,17 +28,33 @@ func runKitty() {
     // Command to execute
     cmd := exec.Command("kitty")
 
-    // Execute the command and capture output
+    // Execute the command and detach
     err := cmd.Start()
     if err != nil {
         fmt.Println("Error running the command \"kitty\":", err)
         return
     }
 
-    // Print the command output
     fmt.Println("Command \"kitty\" has been completed without erros")
 
 }
+
+// vivaldi
+func runVivaldi() {
+    // Command to execute
+    cmd := exec.Command("vivaldi")
+
+    // Execute the command and detach
+    err := cmd.Start()
+    if err != nil {
+        fmt.Println("Error running the command \"vivaldi\":", err)
+        return
+    }
+
+    fmt.Println("Command \"vivaldi\" has been completed without erros")
+
+}
+
 
 func resetLights(launchpad *gonovation.Launchpad) {
      
@@ -49,9 +63,16 @@ func resetLights(launchpad *gonovation.Launchpad) {
     // Light avaiable buttons
     r_orange := 3
     g_orange := 3
+
+    // Power off button
     launchpad.Led(0, 8, 3, 0)
+
+    // Terminal applications
     launchpad.Led(0, 7, r_orange, g_orange)
     launchpad.Led(1, 7, r_orange, g_orange)
+
+    // Desktop Applications
+    launchpad.Led(0, 6, r_orange, g_orange)
 
 }
 
@@ -73,7 +94,7 @@ func main() {
 		if pressed {
            
            // Light the pressed key
-           fmt.Println("You pressed: %d, %d", x, y)
+           fmt.Println("You pressed: ", x, y)
      	   launchpad.Led(int(x), int(y), 0, 3)
            
            button := [2] int { int(x), int(y) }   
@@ -82,14 +103,20 @@ func main() {
            
            // Reset button
            case [2] int { 0, 8 }:
+
                 fmt.Println("Clearing Screen")
                 launchpad.Reset()
                 launchpad.Close()
                 os.Exit(0)
-           case [2] int {0, 7}:
-                runUname()
-           case [2] int {1, 7}:
+           case [2] int { 0, 7 }:
+
+                runRanger()
+           case [2] int { 1, 7 }:
+
                 runKitty()
+           case [2] int { 0, 6 }:
+
+                runVivaldi()
            default:
            }
 
