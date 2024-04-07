@@ -55,6 +55,40 @@ func runVivaldi() {
 
 }
 
+// nvidia-smi -l
+func runNvidiaSmi() {
+    // Command to execute
+    cmd := exec.Command("kitty", "nvidia-smi", "-l")
+
+    // Execute the command and detach
+    err := cmd.Start()
+    if err != nil {
+        fmt.Println("Error running the command \"nvidia-smi -l\":", err)
+        return
+    }
+
+    fmt.Println("Command \"nvidia-smi -l\" has been completed without erros")
+
+}
+
+
+// vivaldi
+func runBtop() {
+    // Command to execute
+    cmd := exec.Command("kitty", "btop")
+
+    // Execute the command and detach
+    err := cmd.Start()
+    if err != nil {
+        fmt.Println("Error running the command \"kitty btop\":", err)
+        return
+    }
+
+    fmt.Println("Command \"kitty btop\" has been completed without erros")
+
+}
+
+
 
 func resetLights(launchpad *gonovation.Launchpad) {
      
@@ -70,6 +104,8 @@ func resetLights(launchpad *gonovation.Launchpad) {
     // Terminal applications
     launchpad.Led(0, 7, r_orange, g_orange)
     launchpad.Led(1, 7, r_orange, g_orange)
+    launchpad.Led(2, 7, r_orange, g_orange)
+    launchpad.Led(3, 7, r_orange, g_orange)
 
     // Desktop Applications
     launchpad.Led(0, 6, r_orange, g_orange)
@@ -114,10 +150,17 @@ func main() {
            case [2] int { 1, 7 }:
 
                 runKitty()
+           case [2] int { 2, 7 }:
+
+                runNvidiaSmi()
+           case [2] int { 3, 7 }:
+
+                runBtop()
            case [2] int { 0, 6 }:
 
                 runVivaldi()
            default:
+
            }
 
         } else {
